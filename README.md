@@ -20,4 +20,6 @@
   
 	5.选中With original text复选框可以同时显示选中原文。
 
-	 
+注释：  
+  
+    mac系统需要将代码中的'ctrl'替换为'cmd'
