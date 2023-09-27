@@ -6,6 +6,7 @@ from pynput.mouse import Listener, Button
 from easygoogletranslate import EasyGoogleTranslate
 import sys,re
 import pyperclip
+import pyautogui
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTextEdit
 
 translator = EasyGoogleTranslate(
@@ -56,12 +57,29 @@ class MainWindow(QMainWindow):
 
         self.start_thread()
 
-        self.checkbox = QCheckBox("", self)
+        container = QWidget(self)
+
+        # 创建一个水平布局
+        layout = QHBoxLayout(container)
+
+        # 创建并配置第一个 checkbox
+        self.checkbox = QCheckBox("Open", self)
         self.checkbox.setShortcut(QKeySequence("Alt+t"))
-        self.checkbox.move(400, 300)
-        self.setMenuWidget(self.checkbox)
+        layout.addWidget(self.checkbox)
 
+        # 创建并配置第二个 checkbox
+        self.checkbox2 = QCheckBox("Mark", self)
+        self.checkbox2.setChecked(True)
+        self.checkbox2.setShortcut(QKeySequence("Alt+y"))
+        layout.addWidget(self.checkbox2)
 
+        self.checkbox3 = QCheckBox("With original text", self)
+        # self.checkbox3.setChecked(True)
+        self.checkbox3.setShortcut(QKeySequence("Alt+u"))
+        layout.addWidget(self.checkbox3)
+
+        # 将容器 widget 设置为 menu widget
+        self.setMenuWidget(container)
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
         font = self.textbox.font()
         font_size = 26
@@ -76,8 +94,8 @@ class MainWindow(QMainWindow):
             pass
            # print("未勾选")
         else:
-
-
+            if self.checkbox2.isChecked():
+                pyautogui.hotkey("ctrl","c")
 
             clipboard = pyperclip.paste()
             if isinstance(clipboard,str) and len(clipboard)<3000:
@@ -93,7 +111,10 @@ class MainWindow(QMainWindow):
                     print(clipboard)
                     self.clipboard_text = clipboard
                     try:
-                        self.textbox.setText(translator.translate(self.clipboard_text)+'\n'+self.clipboard_text)
+                        if self.checkbox3.isChecked():
+                            self.textbox.setText(translator.translate(self.clipboard_text)+'\n'+self.clipboard_text)
+                        else:
+                            self.textbox.setText(translator.translate(self.clipboard_text))
                     except:
                         print("error")
 
