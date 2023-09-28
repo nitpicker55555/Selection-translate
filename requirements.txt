@@ -1,5 +1,5 @@
-PyQt5
-pynput
-easygoogletranslate
-pyperclip
-pyautogui
+PyQt5==5.12
+pynput==1.7.6
+easygoogletranslate==0.0.4
+pyperclip==1.8.2
+pyautogui==0.9.53
